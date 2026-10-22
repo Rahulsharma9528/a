@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Infrastructure Library</title>
+<!-- <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+
+  body {
+    background: #eef2f7;
+    color: #1f2937;
+  }
+
+  .app {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    color: white;
+    padding: 28px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(30, 58, 138, 0.25);
+    animation: fadeDown 0.7s ease;
+  }
+
+  .header h1 {
+    font-size: 30px;
+  }
+
+  .header p {
+    margin-top: 6px;
+    opacity: 0.9;
+  }
+
+  .tabs {
+    position: relative;
+    display: flex;
+    gap: 6px;
+    background: white;
+    padding: 8px;
+    border-radius: 999px;
+    margin: 25px 0;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+  }
+
+  .tab-btn {
+    position: relative;
+    z-index: 2;
+    border: none;
+    background: transparent;
+    padding: 12px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+  }
+
+  .tab-btn:hover {
+    color: #1e3a8a;
+  }
+
+  .tab-btn.active {
+    color: white;
+  }
+
+  .tab-indicator {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    height: calc(100% - 16px);
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    border-radius: 999px;
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.35);
+  }
+
+  .tab-panel {
+    display: none;
+    animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .tab-panel.active {
+    display: block;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+  }
+
+  .stat-card {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeUp 0.6s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+  }
+
+  .stat-card h3 {
+    font-size: 15px;
+    color: #64748b;
+  }
+
+  .stat-card strong {
+    display: block;
+    margin-top: 10px;
+    font-size: 34px;
+    color: #1e3a8a;
+  }
+
+  .card {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+    margin-bottom: 22px;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .card h2 {
+    margin-bottom: 16px;
+    color: #1e3a8a;
+  }
+
+  form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  input:focus, select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  }
+
+  .btn {
+    border: none;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(59, 130, 246, 0.35);
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+
+  th, td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  th {
+    background: #f1f5f9;
+    color: #334155;
+  }
+
+  tr {
+    transition: background 0.2s ease;
+  }
+
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  .small-btn {
+    border: none;
+    padding: 7px 12px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .small-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .return {
+    background: #d97706;
+  }
+
+  .delete {
+    background: #dc2626;
+  }
+
+  .empty {
+    color: #6b7280;
+    padding: 16px;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeDown {
+    from {
+      opacity: 0;
+      transform: translateY(-18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 650px) {
+    .header h1 {
+      font-size: 23px;
+    }
+
+    .tab-btn {
+      padding: 10px 15px;
+      font-size: 14px;
+    }
+  }
+</style> -->
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <h1>Rahul Sharma and Mukesh Prajapati Library Management System</h1>
+    <p>Manage books, members, loans, and history from one dashboard.</p>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <div class="tab-indicator" id="tabIndicator"></div>
+
+    <button class="tab-btn active" data-target="dashboard">Dashboard</button>
+    <button class="tab-btn" data-target="books">Books</button>
+    <button class="tab-btn" data-target="members">Members</button>
+    <button class="tab-btn" data-target="loans">Loans</button>
+    <button class="tab-btn" data-target="history">History</button>
+  </nav>
+
+  <!-- Dashboard -->
+  <section id="dashboard" class="tab-panel active">
+    <div class="stats">
+      <div class="stat-card">
+        <h3>Total Books</h3>
+        <strong id="totalBooks">0</strong>
+      </div>
+      <div class="stat-card">
+        <h3>Total Members</h3>
+        <strong id="totalMembers">0</strong>
+      </div>
+      <div class="stat-card">
+        <h3>Active Loans</h3>
+        <strong id="activeLoans">0</strong>
+      </div>
+      <div class="stat-card">
+        <h3>Returned Books</h3>
+        <strong id="returnedBooks">0</strong>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:22px;">
+      <h2>Currently Issued Books</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Member</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+          </tr>
+        </thead>
+        <tbody id="dashboardLoanTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Books -->
+  <section id="books" class="tab-panel">
+    <div class="card">
+      <h2>Add Book</h2>
+      <form id="bookForm">
+        <input type="text" id="bookTitle" placeholder="Book title" required>
+        <input type="text" id="bookAuthor" placeholder="Author" required>
+        <input type="text" id="bookCategory" placeholder="Category" required>
+        <input type="number" id="bookCopies" placeholder="Copies" min="1" required>
+        <button class="btn">Add Book</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Book Records</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Copies</th>
+            <th>Available</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="bookTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Members -->
+  <section id="members" class="tab-panel">
+    <div class="card">
+      <h2>Add Member</h2>
+      <form id="memberForm">
+        <input type="text" id="memberName" placeholder="Student / staff name" required>
+        <input type="email" id="memberEmail" placeholder="Email" required>
+        <input type="text" id="memberPhone" placeholder="Phone number" required>
+        <button class="btn">Add Member</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Member Records</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="memberTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Loans -->
+  <section id="loans" class="tab-panel">
+    <div class="card">
+      <h2>Issue Book</h2>
+      <form id="loanForm">
+        <select id="loanBook" required></select>
+        <select id="loanMember" required></select>
+        <input type="date" id="loanDueDate" required>
+        <button class="btn">Issue Book</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Active Loans</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Member</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="loanTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- History -->
+  <section id="history" class="tab-panel">
+    <div class="card">
+      <h2>Loan History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Member</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="historyTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<!-- <script>
+let books = JSON.parse(localStorage.getItem("libraryBooks")) || [];
+let members = JSON.parse(localStorage.getItem("libraryMembers")) || [];
+let loans = JSON.parse(localStorage.getItem("libraryLoans")) || [];
+
+const tabButtons = document.querySelectorAll(".tab-btn");
+const tabPanels = document.querySelectorAll(".tab-panel");
+const indicator = document.getElementById("tabIndicator");
+
+function moveIndicator(button) {
+  indicator.style.width = button.offsetWidth + "px";
+  indicator.style.transform = `translateX(${button.offsetLeft}px)`;
+}
+
+function activateTab(button) {
+  tabButtons.forEach(btn => btn.classList.remove("active"));
+  tabPanels.forEach(panel => panel.classList.remove("active"));
+
+  button.classList.add("active");
+  document.getElementById(button.dataset.target).classList.add("active");
+  moveIndicator(button);
+}
+
+tabButtons.forEach(button => {
+  button.addEventListener("click", () => activateTab(button));
+});
+
+window.addEventListener("resize", () => {
+  const active = document.querySelector(".tab-btn.active");
+  moveIndicator(active);
+});
+
+function saveData() {
+  localStorage.setItem("libraryBooks", JSON.stringify(books));
+  localStorage.setItem("libraryMembers", JSON.stringify(members));
+  localStorage.setItem("libraryLoans", JSON.stringify(loans));
+}
+
+function today() {
+  return new Date().toISOString().split("T")[0];
+}
+
+function availableCopies(book) {
+  const issued = loans.filter(
+    loan => loan.bookId === book.id && loan.status === "Issued"
+  ).length;
+
+  return book.copies - issued;
+}
+
+document.getElementById("bookForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  books.push({
+    id: Date.now(),
+    title: bookTitle.value.trim(),
+    author: bookAuthor.value.trim(),
+    category: bookCategory.value.trim(),
+    copies: Number(bookCopies.value)
+  });
+
+  saveData();
+  event.target.reset();
+  renderAll();
+});
+
+document.getElementById("memberForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  members.push({
+    id: Date.now(),
+    name: memberName.value.trim(),
+    email: memberEmail.value.trim(),
+    phone: memberPhone.value.trim()
+  });
+
+  saveData();
+  event.target.reset();
+  renderAll();
+});
+
+document.getElementById("loanForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const book = books.find(item => item.id == loanBook.value);
+  const member = members.find(item => item.id == loanMember.value);
+
+  if (!book || !member) return;
+
+  if (availableCopies(book) <= 0) {
+    alert("This book has no available copies.");
+    return;
+  }
+
+  loans.push({
+    id: Date.now(),
+    bookId: book.id,
+    memberId: member.id,
+    issueDate: today(),
+    dueDate: loanDueDate.value,
+    returnDate: null,
+    status: "Issued"
+  });
+
+  saveData();
+  event.target.reset();
+  renderAll();
+});
+
+function deleteBook(id) {
+  books = books.filter(book => book.id !== id);
+  saveData();
+  renderAll();
+}
+
+function deleteMember(id) {
+  members = members.filter(member => member.id !== id);
+  saveData();
+  renderAll();
+}
+
+function returnBook(id) {
+  const loan = loans.find(item => item.id === id);
+
+  if (loan) {
+    loan.status = "Returned";
+    loan.returnDate = today();
+  }
+
+  saveData();
+  renderAll();
+}
+
+function renderBooks() {
+  const tbody = document.getElementById("bookTable");
+  tbody.innerHTML = "";
+
+  if (!books.length) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty">No books added yet.</td></tr>`;
+    return;
+  }
+
+  books.forEach(book => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${book.title}</td>
+        <td>${book.author}</td>
+        <td>${book.category}</td>
+        <td>${book.copies}</td>
+        <td>${availableCopies(book)}</td>
+        <td>
+          <button class="small-btn delete" onclick="deleteBook(${book.id})">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+function renderMembers() {
+  const tbody = document.getElementById("memberTable");
+  tbody.innerHTML = "";
+
+  if (!members.length) {
+    tbody.innerHTML = `<tr><td colspan="4" class="empty">No members added yet.</td></tr>`;
+    return;
+  }
+
+  members.forEach(member => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${member.name}</td>
+        <td>${member.email}</td>
+        <td>${member.phone}</td>
+        <td>
+          <button class="small-btn delete" onclick="deleteMember(${member.id})">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+function renderLoanOptions() {
+  const bookSelect = document.getElementById("loanBook");
+  const memberSelect = document.getElementById("loanMember");
+
+  bookSelect.innerHTML = `<option value="">Select book</option>`;
+  memberSelect.innerHTML = `<option value="">Select member</option>`;
+
+  books.forEach(book => {
+    bookSelect.innerHTML += `
+      <option value="${book.id}">
+        ${book.title} — ${availableCopies(book)} available
+      </option>
+    `;
+  });
+
+  members.forEach(member => {
+    memberSelect.innerHTML += `
+      <option value="${member.id}">${member.name}</option>
+    `;
+  });
+}
+
+function renderLoans() {
+  const tbody = document.getElementById("loanTable");
+  tbody.innerHTML = "";
+
+  const activeLoans = loans.filter(loan => loan.status === "Issued");
+
+  if (!activeLoans.length) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty">No active loans.</td></tr>`;
+    return;
+  }
+
+  activeLoans.forEach(loan => {
+    const book = books.find(item => item.id === loan.bookId);
+    const member = members.find(item => item.id === loan.memberId);
+    const overdue = loan.dueDate < today();
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${book ? book.title : "Unknown"}</td>
+        <td>${member ? member.name : "Unknown"}</td>
+        <td>${loan.issueDate}</td>
+        <td>${loan.dueDate}</td>
+        <td>${overdue ? "Overdue" : "Issued"}</td>
+        <td>
+          <button class="small-btn return" onclick="returnBook(${loan.id})">Return</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+function renderHistory() {
+  const tbody = document.getElementById("historyTable");
+  tbody.innerHTML = "";
+
+  if (!loans.length) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty">No loan history yet.</td></tr>`;
+    return;
+  }
+
+  loans.forEach(loan => {
+    const book = books.find(item => item.id === loan.bookId);
+    const member = members.find(item => item.id === loan.memberId);
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${book ? book.title : "Unknown"}</td>
+        <td>${member ? member.name : "Unknown"}</td>
+        <td>${loan.issueDate}</td>
+        <td>${loan.dueDate}</td>
+        <td>${loan.returnDate || "-"}</td>
+        <td>${loan.status}</td>
+      </tr>
+    `;
+  });
+}
+
+function renderDashboard() {
+  document.getElementById("totalBooks").textContent = books.length;
+  document.getElementById("totalMembers").textContent = members.length;
+
+  const active = loans.filter(loan => loan.status === "Issued");
+  const returned = loans.filter(loan => loan.status === "Returned");
+
+  document.getElementById("activeLoans").textContent = active.length;
+  document.getElementById("returnedBooks").textContent = returned.length;
+
+  const tbody = document.getElementById("dashboardLoanTable");
+  tbody.innerHTML = "";
+
+  if (!active.length) {
+    tbody.innerHTML = `<tr><td colspan="4" class="empty">No books are currently issued.</td></tr>`;
+    return;
+  }
+
+  active.forEach(loan => {
+    const book = books.find(item => item.id === loan.bookId);
+    const member = members.find(item => item.id === loan.memberId);
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${book ? book.title : "Unknown"}</td>
+        <td>${member ? member.name : "Unknown"}</td>
+        <td>${loan.issueDate}</td>
+        <td>${loan.dueDate}</td>
+      </tr>
+    `;
+  });
+}
+
+function renderAll() {
+  renderBooks();
+  renderMembers();
+  renderLoanOptions();
+  renderLoans();
+  renderHistory();
+  renderDashboard();
+}
+
+document.getElementById("loanDueDate").value = today();
+renderAll();
+
+window.addEventListener("load", () => {
+  moveIndicator(document.querySelector(".tab-btn.active"));
+});
+</script> -->
+
+</body>
+<script src="./script.js"></script>
+</html>

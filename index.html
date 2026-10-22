@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management System - Rahul Sharma & Mukesh Prajapati</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="app-container">
+
+    <!-- Top Header & Branding -->
+    <header class="top-header">
+      <div class="header-brand">
+        <div class="brand-icon-box">
+          <i class="fa-solid fa-book-open-reader"></i>
+        </div>
+        <div class="brand-details">
+          <h1 id="headerLibraryName">Rahul Sharma & Mukesh Prajapati Library System</h1>
+          <p>Real-time Book Circulation, Member Directory & Native SQLite Database</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="status-pill" id="systemHealthPill" title="Server Status">
+          <span class="status-indicator-dot" id="healthStatusDot"></span>
+          <span id="healthStatusText">Connecting...</span>
+        </div>
+
+        <div class="status-pill" title="Current Time">
+          <i class="fa-regular fa-clock" style="font-size:12px; opacity:0.8;"></i>
+          <span id="liveClockText">Loading time...</span>
+        </div>
+
+        <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs Bar -->
+    <nav class="tabs-navigation-wrapper">
+      <div class="tabs-nav">
+        <button class="nav-tab-btn active" data-tab="dashboard">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="books">
+          <i class="fa-solid fa-book"></i>
+          <span>Books Catalog</span>
+          <span class="tab-badge" id="badgeBooksCount">0</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="members">
+          <i class="fa-solid fa-users"></i>
+          <span>Members</span>
+          <span class="tab-badge" id="badgeMembersCount">0</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="loans">
+          <i class="fa-solid fa-arrows-rotate"></i>
+          <span>Circulation</span>
+          <span class="tab-badge" id="badgeLoansCount">0</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="history">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Loan History</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="settings">
+          <i class="fa-solid fa-gear"></i>
+          <span>Settings</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- TAB 1: DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content-panel active">
+      <!-- KPI Metrics Grid -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-info">
+            <h4>Total Titles</h4>
+            <div class="metric-value" id="statTotalBooks">0</div>
+            <span class="metric-subtext">Unique catalog entries</span>
+          </div>
+          <div class="metric-icon-bubble metric-icon-blue">
+            <i class="fa-solid fa-book-bookmark"></i>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-info">
+            <h4>Physical Copies</h4>
+            <div class="metric-value" id="statTotalCopies">0</div>
+            <span class="metric-subtext">Total inventory in library</span>
+          </div>
+          <div class="metric-icon-bubble metric-icon-indigo">
+            <i class="fa-solid fa-cubes-stacked"></i>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-info">
+            <h4>Total Members</h4>
+            <div class="metric-value" id="statTotalMembers">0</div>
+            <span class="metric-subtext">Active students & faculty</span>
+          </div>
+          <div class="metric-icon-bubble metric-icon-purple">
+            <i class="fa-solid fa-user-group"></i>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-info">
+            <h4>Active Loans</h4>
+            <div class="metric-value" id="statActiveLoans">0</div>
+            <span class="metric-subtext">Books currently issued</span>
+          </div>
+          <div class="metric-icon-bubble metric-icon-emerald">
+            <i class="fa-solid fa-hand-holding-hand"></i>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-info">
+            <h4>Overdue Loans</h4>
+            <div class="metric-value" id="statOverdueLoans" style="color:var(--danger);">0</div>
+            <span class="metric-subtext">Past designated due date</span>
+          </div>
+          <div class="metric-icon-bubble metric-icon-rose">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-info">
+            <h4>Collected Fines</h4>
+            <div class="metric-value" id="statTotalFines">$0.00</div>
+            <span class="metric-subtext">Accumulated late returns</span>
+          </div>
+          <div class="metric-icon-bubble metric-icon-amber">
+            <i class="fa-solid fa-receipt"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Floating Bar -->
+      <div class="quick-action-bar">
+        <div class="quick-action-title">
+          <i class="fa-solid fa-bolt" style="color:var(--warning);"></i>
+          <span>Quick Actions</span>
+        </div>
+        <div class="quick-action-buttons">
+          <button class="btn btn-primary btn-sm" onclick="promptIssueBook()">
+            <i class="fa-solid fa-plus"></i> Issue Book
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="openModal('addBookModal')">
+            <i class="fa-solid fa-book-medical"></i> Add Book
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="openModal('addMemberModal')">
+            <i class="fa-solid fa-user-plus"></i> New Member
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="exportData('books')">
+            <i class="fa-solid fa-file-csv"></i> Export Catalog
+          </button>
+        </div>
+      </div>
+
+      <!-- Two-Column Analytics Section -->
+      <div class="dashboard-grid-2col">
+        <!-- Category Distribution -->
+        <div class="content-card">
+          <div class="card-header-row">
+            <div class="card-title-group">
+              <h3><i class="fa-solid fa-layer-group" style="color:var(--primary); margin-right:8px;"></i>Category Distribution</h3>
+              <p>Breakdown of copies across departments</p>
+            </div>
+          </div>
+          <div class="category-bars-list" id="categoryBarsContainer">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Circulation Breakdown -->
+        <div class="content-card">
+          <div class="card-header-row">
+            <div class="card-title-group">
+              <h3><i class="fa-solid fa-chart-donut" style="color:var(--secondary); margin-right:8px;"></i>Circulation Health</h3>
+              <p>Inventory availability vs active loans</p>
+            </div>
+          </div>
+          <div class="circulation-summary-box">
+            <div class="circulation-stat-pill">
+              <span class="num" id="circStatAvailable" style="color:var(--success);">0</span>
+              <span class="lbl">Available on Shelf</span>
+            </div>
+            <div class="circulation-stat-pill">
+              <span class="num" id="circStatBorrowed" style="color:var(--primary);">0</span>
+              <span class="lbl">Currently Borrowed</span>
+            </div>
+            <div class="circulation-stat-pill">
+              <span class="num" id="circStatOverdue" style="color:var(--danger);">0</span>
+              <span class="lbl">Overdue</span>
+            </div>
+          </div>
+          <div class="card-title-group" style="margin-top:16px;">
+            <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">Recent System Audit Log</h4>
+          </div>
+          <div class="activity-timeline" id="activityTimelineContainer">
+            <!-- Timeline entries rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Currently Issued Loans Table Preview -->
+      <div class="content-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <h3><i class="fa-solid fa-bell" style="color:var(--warning); margin-right:8px;"></i>Circulation Watchlist</h3>
+            <p>Books requiring attention or nearing return date</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="activateTab('loans')">
+            <span>View All Circulation</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <div class="table-responsive-wrapper">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th>Book Details</th>
+                <th>Borrower</th>
+                <th>Issue Date</th>
+                <th>Due Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="dashboardLoansTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: BOOKS CATALOG -->
+    <section id="tab-books" class="tab-content-panel">
+      <!-- Search & Filters Toolbar -->
+      <div class="controls-toolbar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="universalSearchInput" placeholder="Search by title, author, category, or ISBN...">
+        </div>
+        <div class="filter-group">
+          <select id="bookCategoryFilterSelect" style="width:auto; min-width:160px;">
+            <option value="All">All Categories</option>
+          </select>
+          <select id="bookAvailabilityFilterSelect" style="width:auto; min-width:140px;">
+            <option value="all">All Statuses</option>
+            <option value="available">In Stock Only</option>
+            <option value="out_of_stock">Out of Stock</option>
+          </select>
+          <button class="btn btn-primary" onclick="openModal('addBookModal')">
+            <i class="fa-solid fa-plus"></i> Add New Book
+          </button>
+        </div>
+      </div>
+
+      <!-- Books Table -->
+      <div class="content-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <h3>Library Book Inventory</h3>
+            <p>Comprehensive catalog of all cataloged volumes and rack locations</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="exportData('books')">
+            <i class="fa-solid fa-download"></i> Export CSV
+          </button>
+        </div>
+
+        <div class="table-responsive-wrapper">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th>Title & ISBN</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Shelf Location</th>
+                <th>Stock Ratio</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="booksTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: MEMBERS DIRECTORY -->
+    <section id="tab-members" class="tab-content-panel">
+      <!-- Toolbar -->
+      <div class="controls-toolbar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" oninput="state.searchQuery=this.value; loadMembers();" placeholder="Search member by name, ID, email, or phone...">
+        </div>
+        <div class="filter-group">
+          <select id="memberRoleFilterSelect" style="width:auto; min-width:140px;">
+            <option value="All">All Roles</option>
+            <option value="Student">Students</option>
+            <option value="Faculty">Faculty</option>
+            <option value="Staff">Staff</option>
+          </select>
+          <button class="btn btn-primary" onclick="openModal('addMemberModal')">
+            <i class="fa-solid fa-user-plus"></i> Register Member
+          </button>
+        </div>
+      </div>
+
+      <!-- Members Table -->
+      <div class="content-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <h3>Registered Members</h3>
+            <p>Authorized patrons eligible for borrowing materials</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="exportData('members')">
+            <i class="fa-solid fa-download"></i> Export CSV
+          </button>
+        </div>
+
+        <div class="table-responsive-wrapper">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th>Member Info</th>
+                <th>Contact Details</th>
+                <th>Role & Dept</th>
+                <th>Borrow Status</th>
+                <th>Account Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="membersTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: CIRCULATION / LOANS -->
+    <section id="tab-loans" class="tab-content-panel">
+      <!-- Controls Toolbar -->
+      <div class="controls-toolbar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" oninput="state.searchQuery=this.value; loadLoans();" placeholder="Search loans by book or member...">
+        </div>
+        <div class="filter-group">
+          <select id="loanStatusFilterSelect" style="width:auto; min-width:150px;">
+            <option value="active">Active Loans</option>
+            <option value="overdue">Overdue Only</option>
+            <option value="all">All Loans</option>
+          </select>
+          <button class="btn btn-primary" onclick="promptIssueBook()">
+            <i class="fa-solid fa-hand-holding-hand"></i> Issue Book
+          </button>
+        </div>
+      </div>
+
+      <!-- Loans Table -->
+      <div class="content-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <h3>Active Book Circulation</h3>
+            <p>Real-time monitor of books currently in custody of library members</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="exportData('loans')">
+            <i class="fa-solid fa-download"></i> Export CSV
+          </button>
+        </div>
+
+        <div class="table-responsive-wrapper">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th>Book & Location</th>
+                <th>Borrower</th>
+                <th>Issued On</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Circulation Action</th>
+              </tr>
+            </thead>
+            <tbody id="loansTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: HISTORY & AUDIT -->
+    <section id="tab-history" class="tab-content-panel">
+      <div class="content-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <h3>Returned Loans Archive</h3>
+            <p>Historical archive of completed book borrowings, return dates, and fines</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="exportData('loans')">
+            <i class="fa-solid fa-download"></i> Export Full History
+          </button>
+        </div>
+
+        <div class="table-responsive-wrapper">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th>Book Title</th>
+                <th>Member</th>
+                <th>Issue Date</th>
+                <th>Due Date</th>
+                <th>Returned Date</th>
+                <th>Fine Assessed</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: SETTINGS & CREDITS -->
+    <section id="tab-settings" class="tab-content-panel">
+      <div class="settings-grid">
+        <!-- Settings Form -->
+        <div class="content-card">
+          <div class="card-header-row">
+            <div class="card-title-group">
+              <h3><i class="fa-solid fa-sliders" style="color:var(--primary); margin-right:8px;"></i>System Configuration</h3>
+              <p>Configure institutional settings, late penalty policies, and currency</p>
+            </div>
+          </div>
+
+          <form id="settingsForm">
+            <div class="form-group">
+              <label for="settingLibraryName">Library / Institution Name</label>
+              <input type="text" id="settingLibraryName" required>
+            </div>
+
+            <div class="form-grid-2col">
+              <div class="form-group">
+                <label for="settingFinePerDay">Fine Per Day Overdue</label>
+                <input type="number" id="settingFinePerDay" step="0.25" min="0" required>
+                <div class="form-hint">Applied automatically to late returns</div>
+              </div>
+
+              <div class="form-group">
+                <label for="settingCurrency">Currency Symbol</label>
+                <select id="settingCurrency">
+                  <option value="$">$ (USD)</option>
+                  <option value="₹">₹ (INR)</option>
+                  <option value="€">€ (EUR)</option>
+                  <option value="£">£ (GBP)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="settingDefaultDays">Default Loan Period (Days)</label>
+              <input type="number" id="settingDefaultDays" min="1" max="90" required>
+              <div class="form-hint">Standard duration for new loans (default: 14 days)</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Save Configuration
+            </button>
+          </form>
+        </div>
+
+        <!-- Project Authors & System Credit Card -->
+        <div>
+          <div class="author-credit-card">
+            <div class="author-avatar-group">
+              <div class="author-avatar" title="Rahul Sharma">RS</div>
+              <div class="author-avatar" title="Mukesh Prajapati" style="background:#7c3aed;">MP</div>
+            </div>
+            <h3 style="font-size:18px; font-weight:800;">Rahul Sharma & Mukesh Prajapati</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Library Management System Platform</p>
+            
+            <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border-color); text-align:left; font-size:12.5px;">
+              <p style="margin-bottom:8px;"><strong>Engine:</strong> Node.js 24 Native SQLite</p>
+              <p style="margin-bottom:8px;"><strong>API Architecture:</strong> RESTful Express</p>
+              <p style="margin-bottom:8px;"><strong>Database:</strong> ACID Compliant Persistent SQLite</p>
+              <p style="margin-bottom:8px;"><strong>Frontend:</strong> Responsive SaaS Design System</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ==========================================================================
+       MODALS
+       ========================================================================== -->
+
+  <!-- Add Book Modal -->
+  <div class="modal-backdrop" id="addBookModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-book-medical" style="color:var(--primary);"></i> Add New Book</h3>
+        <button class="modal-close-btn" onclick="closeModal('addBookModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="addBookForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="bookInputTitle">Book Title *</label>
+            <input type="text" id="bookInputTitle" placeholder="e.g. Clean Architecture" required>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="bookInputAuthor">Author *</label>
+              <input type="text" id="bookInputAuthor" placeholder="e.g. Robert C. Martin" required>
+            </div>
+            <div class="form-group">
+              <label for="bookInputIsbn">ISBN Number</label>
+              <input type="text" id="bookInputIsbn" placeholder="e.g. 978-0134494166">
+            </div>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="bookInputCategory">Category / Genre *</label>
+              <input type="text" id="bookInputCategory" placeholder="e.g. Computer Science" required>
+            </div>
+            <div class="form-group">
+              <label for="bookInputShelf">Shelf / Rack Location</label>
+              <input type="text" id="bookInputShelf" placeholder="e.g. Rack CS-05">
+            </div>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="bookInputCopies">Total Copies *</label>
+              <input type="number" id="bookInputCopies" value="1" min="1" required>
+            </div>
+            <div class="form-group">
+              <label for="bookInputYear">Publication Year</label>
+              <input type="number" id="bookInputYear" value="2024" min="1800" max="2099">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bookInputPublisher">Publisher</label>
+            <input type="text" id="bookInputPublisher" placeholder="e.g. Pearson / MIT Press">
+          </div>
+          <div class="form-group">
+            <label for="bookInputDesc">Short Description</label>
+            <textarea id="bookInputDesc" rows="2" placeholder="Brief synopsis or syllabus relevance..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('addBookModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Book Modal -->
+  <div class="modal-backdrop" id="editBookModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-pen-to-square" style="color:var(--primary);"></i> Edit Book Details</h3>
+        <button class="modal-close-btn" onclick="closeModal('editBookModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="editBookForm">
+        <input type="hidden" id="editBookId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editBookTitle">Book Title *</label>
+            <input type="text" id="editBookTitle" required>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="editBookAuthor">Author *</label>
+              <input type="text" id="editBookAuthor" required>
+            </div>
+            <div class="form-group">
+              <label for="editBookIsbn">ISBN Number *</label>
+              <input type="text" id="editBookIsbn" required>
+            </div>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="editBookCategory">Category *</label>
+              <input type="text" id="editBookCategory" required>
+            </div>
+            <div class="form-group">
+              <label for="editBookShelf">Shelf Location</label>
+              <input type="text" id="editBookShelf">
+            </div>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="editBookCopies">Total Copies</label>
+              <input type="number" id="editBookCopies" min="1" required>
+            </div>
+            <div class="form-group">
+              <label for="editBookYear">Publication Year</label>
+              <input type="number" id="editBookYear">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editBookPublisher">Publisher</label>
+            <input type="text" id="editBookPublisher">
+          </div>
+          <div class="form-group">
+            <label for="editBookDesc">Description</label>
+            <textarea id="editBookDesc" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('editBookModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Member Modal -->
+  <div class="modal-backdrop" id="addMemberModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-plus" style="color:var(--primary);"></i> Register New Member</h3>
+        <button class="modal-close-btn" onclick="closeModal('addMemberModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="addMemberForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="memberInputName">Full Name *</label>
+            <input type="text" id="memberInputName" placeholder="e.g. Aarav Patel" required>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="memberInputEmail">Institutional Email *</label>
+              <input type="email" id="memberInputEmail" placeholder="e.g. aarav@school.edu" required>
+            </div>
+            <div class="form-group">
+              <label for="memberInputPhone">Contact Number *</label>
+              <input type="text" id="memberInputPhone" placeholder="e.g. +91 98765 43210" required>
+            </div>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="memberInputRole">Role</label>
+              <select id="memberInputRole">
+                <option value="Student">Student</option>
+                <option value="Faculty">Faculty</option>
+                <option value="Staff">Staff</option>
+                <option value="Researcher">Researcher</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="memberInputDept">Department / Grade</label>
+              <input type="text" id="memberInputDept" placeholder="e.g. Computer Science">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="memberInputLimit">Max Borrow Limit</label>
+            <input type="number" id="memberInputLimit" value="3" min="1" max="10">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('addMemberModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Enroll Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Member Modal -->
+  <div class="modal-backdrop" id="editMemberModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-pen" style="color:var(--primary);"></i> Edit Member Profile</h3>
+        <button class="modal-close-btn" onclick="closeModal('editMemberModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="editMemberForm">
+        <input type="hidden" id="editMemberId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editMemberName">Full Name *</label>
+            <input type="text" id="editMemberName" required>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="editMemberEmail">Email *</label>
+              <input type="email" id="editMemberEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="editMemberPhone">Phone *</label>
+              <input type="text" id="editMemberPhone" required>
+            </div>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="editMemberRole">Role</label>
+              <select id="editMemberRole">
+                <option value="Student">Student</option>
+                <option value="Faculty">Faculty</option>
+                <option value="Staff">Staff</option>
+                <option value="Researcher">Researcher</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="editMemberDept">Department</label>
+              <input type="text" id="editMemberDept">
+            </div>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label for="editMemberLimit">Max Borrow Limit</label>
+              <input type="number" id="editMemberLimit" min="1" max="10">
+            </div>
+            <div class="form-group">
+              <label for="editMemberStatus">Status</label>
+              <select id="editMemberStatus">
+                <option value="Active">Active</option>
+                <option value="Suspended">Suspended</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('editMemberModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Issue Book Modal -->
+  <div class="modal-backdrop" id="issueBookModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-arrow-up-right-from-square" style="color:var(--primary);"></i> Issue Book to Member</h3>
+        <button class="modal-close-btn" onclick="closeModal('issueBookModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="issueBookForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="issueBookSelect">Select Book to Issue *</label>
+            <select id="issueBookSelect" required>
+              <option value="">-- Choose Book --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="issueMemberSelect">Select Registered Member *</label>
+            <select id="issueMemberSelect" required>
+              <option value="">-- Choose Member --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="issueDueDateInput">Return Due Date *</label>
+            <input type="date" id="issueDueDateInput" required>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="setIssueDuePreset(7)">+7 Days</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="setIssueDuePreset(14)">+14 Days (Standard)</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="setIssueDuePreset(30)">+30 Days (Extended)</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="issueNotesInput">Loan Notes / Reference</label>
+            <input type="text" id="issueNotesInput" placeholder="Optional notes (e.g. project research, thesis)">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('issueBookModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm & Issue Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Return Book Modal -->
+  <div class="modal-backdrop" id="returnBookModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-arrow-rotate-left" style="color:var(--success);"></i> Return Book Confirmation</h3>
+        <button class="modal-close-btn" onclick="closeModal('returnBookModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="returnBookForm">
+        <input type="hidden" id="returnLoanId">
+        <div class="modal-body">
+          <p style="font-size:14.5px; margin-bottom:14px;">
+            Are you confirming return for: <strong id="returnBookTitleText">Book Title</strong>?
+          </p>
+          <div style="background:var(--bg-surface-secondary); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Calculated Overdue Fine:</span>
+              <strong style="font-size:18px; color:var(--danger);" id="returnCalculatedFine">$0.00</strong>
+            </div>
+            <label style="display:flex; align-items:center; gap:8px; margin-top:12px; cursor:pointer; font-size:13px;">
+              <input type="checkbox" id="waiveFineCheckbox" style="width:auto;">
+              <span>Waive fine / Forgive penalty</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="returnNotesInput">Condition / Return Notes</label>
+            <input type="text" id="returnNotesInput" placeholder="e.g. Book in good condition">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('returnBookModal')">Cancel</button>
+          <button type="submit" class="btn btn-success">Mark as Returned</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Member History Profile Modal -->
+  <div class="modal-backdrop" id="memberHistoryModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div>
+          <h3 id="memberHistoryName">Member Name</h3>
+          <p style="font-size:12px; color:var(--text-muted);" id="memberHistoryCode">MEM-0000</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('memberHistoryModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4 style="font-size:14px; margin-bottom:12px;">Borrowing & Circulation History</h4>
+        <div id="memberHistoryLoansList">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('memberHistoryModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-backdrop" id="deleteConfirmModal">
+    <div class="modal-container" style="max-width:440px;">
+      <div class="modal-header">
+        <h3 style="color:var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Confirm Deletion</h3>
+        <button class="modal-close-btn" onclick="closeModal('deleteConfirmModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:14px;">Are you sure you want to permanently delete:</p>
+        <p style="font-weight:700; margin-top:8px;" id="deleteConfirmTargetName">Target</p>
+        <p style="font-size:12px; color:var(--text-subtle); margin-top:10px;">
+          Note: Items with active borrowed copies cannot be deleted to preserve library data integrity.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('deleteConfirmModal')">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteExecuteBtn">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Controller Script -->
+  <script src="./script.js"></script>
+</body>
+</html>
